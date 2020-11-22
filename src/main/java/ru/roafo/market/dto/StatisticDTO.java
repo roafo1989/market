@@ -16,12 +16,24 @@ public class StatisticDTO {
     public StatisticDTO() {
     }
 
+    public Integer getProductQty() {
+        return productQty;
+    }
+
+    public List<PriceHistoryByDateDTO> getStatisticByDate() {
+        return statisticByDate;
+    }
+
+    public List<PriceHistoryByProductDTO> getStatisticByProduct() {
+        return statisticByProduct;
+    }
+
     @Override
     public String toString() {
-        return "StatisticDTO{" +
+        return "{" +
                 "productQty=" + productQty +
-                ", statisticByDate=" + statisticByDate +
                 ", statisticByProduct=" + statisticByProduct +
+                ", statisticByDate=" + statisticByDate +
                 '}';
     }
 }

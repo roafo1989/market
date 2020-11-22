@@ -2,23 +2,37 @@ package ru.roafo.market.domain;
 
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
 import java.util.List;
 
-/**
- * A Product.
- */
 @Entity
-@NoArgsConstructor
 @AllArgsConstructor
 public class Product {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private String name;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "product")
+    private List<Price> priceList;
+
+    public Product() {
+    }
+
+    public Product(Long id, String name){
+        this.id = id;
+        this.name = name;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Long getId() {
         return id;
@@ -28,29 +42,11 @@ public class Product {
         return name;
     }
 
-    private String name;
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "product")
-    private List<Price> priceList;
+    public void setPriceList(List<Price> priceList) {
+        this.priceList = priceList;
+    }
 
     public List<Price> getPriceList() {
         return priceList;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Product)) {
-            return false;
-        }
-        return id != null && id.equals(((Product) o).id);
-    }
-
-    @Override
-    public int hashCode() {
-        return 31;
-    }
-
 }

@@ -12,26 +12,10 @@ import java.time.LocalDate;
 
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 public class Price {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
-
-    public Float getPrice() {
-        return price;
-    }
-
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
 
     private Float price;
     private LocalDate date;
@@ -43,21 +27,49 @@ public class Price {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Product product;
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Price)) {
-            return false;
-        }
-        return id != null && id.equals(((Price) o).id);
+    public Price() {
     }
 
-    @Override
-    public int hashCode() {
-        return 31;
+    public Price(Long id, Float price, LocalDate date, Product product){
+        this.id = id;
+        this.price = price;
+        this.date = date;
+        this.product = product;
     }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public Float getPrice() {
+        return price;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setPrice(Float price) {
+        this.price = price;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+
+
 
 }

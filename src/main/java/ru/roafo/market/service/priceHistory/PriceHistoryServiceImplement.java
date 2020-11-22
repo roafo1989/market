@@ -15,8 +15,12 @@ import ru.roafo.market.dto.StatisticDTO;
 import ru.roafo.market.repository.PriceHistoryRepo;
 import ru.roafo.market.repository.ProductRepo;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -25,6 +29,11 @@ public class PriceHistoryServiceImplement implements PriceHistoryService {
     private final PriceHistoryRepo priceHistoryRepo;
     private final ProductRepo productRepo;
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
+
+    private Integer productQty;
+    private List<PriceHistoryByDateDTO> statisticByDate;
+    private List<PriceHistoryByProductDTO> statisticByProduct;
+    private StatisticDTO statisticDTO;
 
     @Autowired
     public PriceHistoryServiceImplement(PriceHistoryRepo priceHistoryRepo, ProductRepo productRepo) {
@@ -109,11 +118,40 @@ public class PriceHistoryServiceImplement implements PriceHistoryService {
     @Override
     public StatisticDTO getStatistic() {
         logger.info("PriceHistoryServiceImplement.getStatistic() is started");
-        Integer productQty = productRepo.findAll().size();
-        List<PriceHistoryByDateDTO> statisticByDate = getStatisticByDate();
-        List<PriceHistoryByProductDTO> statisticByProduct = getStatisticByProduct();
-        StatisticDTO statisticDTO = new StatisticDTO(productQty, statisticByDate, statisticByProduct);
+
+        productQty = productRepo.findAll().size();
+        statisticByDate = getStatisticByDate();
+        statisticByProduct = getStatisticByProduct();
+        statisticDTO = new StatisticDTO(productQty, statisticByDate, statisticByProduct);
+
         logger.info("Created statisticDTO: " + statisticDTO);
         return statisticDTO;
     }
+
+    public void ParseCsv(String filePath) throws IOException {
+        List<Product> products = new ArrayList<>();
+        List<Price> prices = new ArrayList<>();
+
+        List<String> fileLines = Files.readAllLines(Paths.get(filePath));
+        for (String fileLine : fileLines) {
+            String[] row = fileLine.split(";");
+            List<String> cellContentArray = new ArrayList<>();
+            Collections.addAll(cellContentArray, row);
+
+            Long productId = Long.parseLong(cellContentArray.get(0));
+            String productName = cellContentArray.get(1);
+            Long priceId = Long.parseLong(cellContentArray.get(2));
+            Float price = Float.parseFloat(cellContentArray.get(3));
+            LocalDate date = LocalDate.parse(cellContentArray.get(4));
+
+            Product productEntity = new Product(productId, productName);
+            products.add(productEntity);
+
+            Price priceEntity = new Price(priceId, price, date, productEntity);
+            prices.add(priceEntity);
+        }
+        productRepo.saveAll(products);
+        priceHistoryRepo.saveAll(prices);
+    }
+
 }
