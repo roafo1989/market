@@ -6,6 +6,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.Objects;
 
 
 @Entity
@@ -67,5 +68,21 @@ public class Price {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Price)) return false;
+        Price price1 = (Price) o;
+        return getId().equals(price1.getId()) &&
+                getPrice().equals(price1.getPrice()) &&
+                getDate().equals(price1.getDate()) &&
+                getProduct().equals(price1.getProduct());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getPrice(), getDate(), getProduct());
     }
 }

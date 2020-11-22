@@ -12,7 +12,7 @@ import ru.roafo.market.service.file.FileService;
 @Service
 public class MarketScheduledTasksImpl implements MarketScheduledTasks {
 
-    @Value("${directoryScanPeriod}")
+    @Value("${directory.scan.period}")
     private long DIRECTORY_SCAN_PERIOD;
     private final ThreadPoolTaskScheduler scheduler;
     private final FileService fileService;

@@ -13,9 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ImportServiceImpl implements ImportService{
@@ -60,11 +58,8 @@ public class ImportServiceImpl implements ImportService{
 
     private void mapRowsAndSaveProductAndPrices(List<List<String>> csvRows) {
         logger.info("Parse prices.csv file is STARTED...");
-        List<Product> products = new ArrayList<>();
-        List<Long> productIdList = new ArrayList<>();
-
-        List<Price> prices = new ArrayList<>();
-        List<Long> priceIdList = new ArrayList<>();
+        Set<Product> products = new HashSet<>();
+        Set<Price> prices = new HashSet<>();
 
         for (List<String> csvRow : csvRows) {
             Long productId = Long.parseLong(csvRow.get(0));
@@ -74,15 +69,10 @@ public class ImportServiceImpl implements ImportService{
             LocalDate date = LocalDate.parse(csvRow.get(4));
 
             Product productEntity = new Product(productId, productName);
-            if (!productIdList.contains(productId)) {
-                productIdList.add(productId);
-                products.add(productEntity);
-            }
+            products.add(productEntity);
+
             Price priceEntity = new Price(priceId, price, date, productEntity);
-            if (!priceIdList.contains(priceId)) {
-                priceIdList.add(priceId);
-                prices.add(priceEntity);
-            }
+            prices.add(priceEntity);
         }
         logger.info("Processing completed. Processed " + csvRows.size() + " lines in prices.csv");
         productRepo.saveAll(products);

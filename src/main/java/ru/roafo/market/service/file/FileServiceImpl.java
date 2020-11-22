@@ -41,7 +41,7 @@ public class FileServiceImpl implements FileService {
             while (!filesQueue.isEmpty()) {
                 Path file = filesQueue.poll();
                 importService.importProductsAndPricesFromCsv(file);
-                /*Уточнить поведение после прочтения файла: удалять/перемещать/переименовывать?*/
+                /*TODO Уточнить поведение после прочтения файла: удалять/перемещать/переименовывать? Сейчас реализовано удаление*/
                 Files.delete(file);
             }
         } catch (IOException e) {
