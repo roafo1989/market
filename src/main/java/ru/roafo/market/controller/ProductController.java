@@ -1,9 +1,13 @@
 package ru.roafo.market.controller;
 
+import lombok.extern.java.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import ru.roafo.market.Application;
 import ru.roafo.market.dto.PriceHistoryByDateDTO;
 import ru.roafo.market.dto.PriceHistoryByProductDTO;
 import ru.roafo.market.dto.PriceHistoryDTO;
@@ -24,6 +28,8 @@ public class ProductController {
     private ProductService productService;
     private PriceHistoryService priceHistoryService;
 
+    private static final Logger logger = LoggerFactory.getLogger(Application.class);
+
     @Autowired
     public ProductController(ProductService productService, PriceHistoryService priceHistoryService) {
         this.productService = productService;
@@ -34,14 +40,17 @@ public class ProductController {
     @ResponseStatus(value = HttpStatus.OK)
     public List<PriceHistoryDTO> getActualByDate(@RequestParam String date){
         LocalDate localDate = getDate(date);
-        return this.priceHistoryService.getActualByDate(localDate);
+        logger.info("ProductController localDate: " + localDate);
+        List<PriceHistoryDTO> priceHistoryDTOList = this.priceHistoryService.getActualByDate(localDate);
+        logger.info("ProductController priceHistoryDTOList size: " + priceHistoryDTOList.size());
+        return priceHistoryDTOList;
     }
 
     @GetMapping(value = "/statistic", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     public StatisticDTO getStatistic(){
         StatisticDTO statisticDTO = this.priceHistoryService.getStatistic();
-        System.out.println(statisticDTO.toString());
+        logger.info("ProductController get statisticDTO: " + statisticDTO);
         return statisticDTO;
     }
 
