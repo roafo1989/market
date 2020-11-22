@@ -14,7 +14,6 @@ import java.time.LocalDate;
 @Entity
 public class Price {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
     private Float price;

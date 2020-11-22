@@ -3,6 +3,7 @@ package ru.roafo.market.service.priceHistory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.roafo.market.Application;
@@ -34,6 +35,9 @@ public class PriceHistoryServiceImplement implements PriceHistoryService {
     private List<PriceHistoryByDateDTO> statisticByDate;
     private List<PriceHistoryByProductDTO> statisticByProduct;
     private StatisticDTO statisticDTO;
+
+    @Value("${filePath}")
+    private String filePath;
 
     @Autowired
     public PriceHistoryServiceImplement(PriceHistoryRepo priceHistoryRepo, ProductRepo productRepo) {
@@ -125,14 +129,19 @@ public class PriceHistoryServiceImplement implements PriceHistoryService {
         statisticDTO = new StatisticDTO(productQty, statisticByDate, statisticByProduct);
 
         logger.info("Created statisticDTO: " + statisticDTO);
-        return statisticDTO;
+        return null;
     }
 
-    public void ParseCsv(String filePath) throws IOException {
+    @Override
+    public void parseCsv(List<String> fileLines) throws IOException {
+        logger.info("Start parse prices.csv file...");
         List<Product> products = new ArrayList<>();
-        List<Price> prices = new ArrayList<>();
+        List<Long> productIdList = new ArrayList<>();
 
-        List<String> fileLines = Files.readAllLines(Paths.get(filePath));
+        List<Price> prices = new ArrayList<>();
+        List<Long> priceIdList = new ArrayList<>();
+
+       // List<String> fileLines = Files.readAllLines(Paths.get(filePath));
         for (String fileLine : fileLines) {
             String[] row = fileLine.split(";");
             List<String> cellContentArray = new ArrayList<>();
@@ -145,13 +154,21 @@ public class PriceHistoryServiceImplement implements PriceHistoryService {
             LocalDate date = LocalDate.parse(cellContentArray.get(4));
 
             Product productEntity = new Product(productId, productName);
-            products.add(productEntity);
-
+            if(!productIdList.contains(productId)) {
+                productIdList.add(productId);
+                products.add(productEntity);
+            }
             Price priceEntity = new Price(priceId, price, date, productEntity);
-            prices.add(priceEntity);
+            if(!priceIdList.contains(priceId)){
+                priceIdList.add(priceId);
+                prices.add(priceEntity);
+            }
         }
+        logger.info("Processing completed. Processed " + fileLines.size() + " lines in prices.csv");
         productRepo.saveAll(products);
+        logger.info("Created " + products.size() + " products");
         priceHistoryRepo.saveAll(prices);
+        logger.info("Created " + prices.size() + " prices");
     }
 
 }

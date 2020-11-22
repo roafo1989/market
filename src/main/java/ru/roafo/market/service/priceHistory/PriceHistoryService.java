@@ -6,6 +6,7 @@ import ru.roafo.market.dto.PriceHistoryByProductDTO;
 import ru.roafo.market.dto.PriceHistoryDTO;
 import ru.roafo.market.dto.StatisticDTO;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -27,4 +28,5 @@ public interface PriceHistoryService {
     List<PriceHistoryByDateDTO> getStatisticByDate();
     StatisticDTO getStatistic();
 
+    void parseCsv(List<String> fileLines) throws IOException;
 }

@@ -15,6 +15,7 @@ import ru.roafo.market.dto.StatisticDTO;
 import ru.roafo.market.service.priceHistory.PriceHistoryService;
 import ru.roafo.market.service.product.ProductService;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
