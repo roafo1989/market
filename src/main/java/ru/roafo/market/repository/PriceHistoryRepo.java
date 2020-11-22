@@ -14,6 +14,6 @@ public interface PriceHistoryRepo extends JpaRepository<Price, Long> {
 
     List<Price> findAllByProduct(Long productId);
 
-    @Query("select h.date, count(h.date) from Price h\n group by h.date")
+    @Query("select p.date, count(p.date) from Price p group by p.date")
     List<?> getStatisticByDate();
 }

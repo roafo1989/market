@@ -7,7 +7,9 @@ public class StatisticDTO {
     private List<PriceHistoryByDateDTO> statisticByDate;
     private List<PriceHistoryByProductDTO> statisticByProduct;
 
-    public StatisticDTO(Integer productQty, List<PriceHistoryByDateDTO> statisticByDate, List<PriceHistoryByProductDTO> statisticByProduct) {
+    public StatisticDTO(Integer productQty,
+                        List<PriceHistoryByDateDTO> statisticByDate,
+                        List<PriceHistoryByProductDTO> statisticByProduct) {
         this.productQty = productQty;
         this.statisticByDate = statisticByDate;
         this.statisticByProduct = statisticByProduct;

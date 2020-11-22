@@ -1,13 +1,13 @@
 package ru.roafo.market.domain;
 
 
-import lombok.AllArgsConstructor;
-
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.List;
 
 @Entity
-@AllArgsConstructor
 public class Product {
 
     @Id
@@ -20,9 +20,17 @@ public class Product {
     public Product() {
     }
 
-    public Product(Long id, String name){
+    public Product(Long id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public Product(String name) {
+        this.name = name;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public void setId(Long id) {
@@ -31,10 +39,6 @@ public class Product {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getName() {

@@ -6,6 +6,10 @@ public class PriceHistoryByDateDTO {
     private LocalDate date;
     private Integer frequency;
 
+    public PriceHistoryByDateDTO(LocalDate date, Integer frequency) {
+        this.date = date;
+        this.frequency = frequency;
+    }
 
     public LocalDate getDate() {
         return date;
@@ -13,11 +17,6 @@ public class PriceHistoryByDateDTO {
 
     public Integer getFrequency() {
         return frequency;
-    }
-
-    public PriceHistoryByDateDTO(LocalDate date, Integer frequency) {
-        this.date = date;
-        this.frequency = frequency;
     }
 
     @Override
